@@ -1,43 +1,48 @@
 import React, { Component } from 'react';
-import TodoListUL from './TodoList';
+import {connect} from 'react-redux';
+import { addItemTodo } from './actions/index'
+import './app.css'
+import { Button, Input, List, Typography } from 'antd';
 
 class App extends Component {
-  state = {
-    arr: [],
-    inputValue: ''
+   
+  constructor(props){
+    super(props)
+    this.state = {
+      inputValue:''
+    }
   }
-  handleClick() {
-    let arrs = this.state.arr
-    arrs.push(this.state.inputValue)
+  inputChange(e){
+    var value = e.target.value
     this.setState({
-      arr: arrs,
-      inputValue: ''
-    })
-  }
-  handleChange(e) {
-    this.setState({
-      inputValue: e.target.value
-    })
-  }
-  handleDelete(e) {
-    let array = this.state.arr.filter((item, index) => {
-      return index !== e
-    })
-    this.setState({
-      arr: array
+      inputValue:value
     })
   }
   render() {
-    console.log("父组件更新")
+    const {addItemTodo} = this.props
     return (
       <div className="App">
-        <div>
-          <input ref="demos" type="text" onChange={this.handleChange.bind(this)} value={this.state.inputValue} />  <button onClick={this.handleClick.bind(this)}>提交</button>
+        <div className="inputBox">
+          <Input placeholder="todo info" onChange={this.inputChange.bind(this)} style={{marginRight:'20px'}}/>
+          <Button type="primary" onClick={()=>addItemTodo(this.state.inputValue)}>Add</Button> 
+        </div> 
+        <div className="listBox">
+          <List
+          header={<div>Todo List</div>}
+          bordered
+          dataSource={this.props.data}
+          renderItem={item => (<List.Item><Typography.Text mark>[ITEM]</Typography.Text> {item}</List.Item>)}
+        />
         </div>
-        <TodoListUL arrlist={this.state.arr} deleteIndex={this.handleDelete.bind(this)} />
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state)=>{
+  return{
+    data: state.todos.list
+  }
+
+}
+export default connect(mapStateToProps,{addItemTodo})(App);
