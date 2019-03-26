@@ -1,4 +1,4 @@
-import * as types from '../count'
+import * as types from '../constans'
 export const addItemTodo = (data)=>{
   return{
       type: types.ADDITEM,

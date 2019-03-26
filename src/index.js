@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
 import App from './App';
 // pwa 在网路没有网的时候也可以看到网页
 import * as serviceWorker from './serviceWorker';

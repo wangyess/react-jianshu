@@ -1,40 +1,28 @@
-import React, { Component } from 'react';
+import React, { Component,Fragment } from 'react';
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import {connect} from 'react-redux';
-import { addItemTodo } from './actions/index'
-import './app.css'
-import { Button, Input, List, Typography } from 'antd';
-
+import { GlobalStyle } from './style';
+import Header from './common/header';
+import Home from './pages/home';
+import Detail from './pages/detail'
 class App extends Component {
    
   constructor(props){
     super(props)
     this.state = {
-      inputValue:''
     }
   }
-  inputChange(e){
-    var value = e.target.value
-    this.setState({
-      inputValue:value
-    })
-  }
+
   render() {
-    const {addItemTodo} = this.props
     return (
-      <div className="App">
-        <div className="inputBox">
-          <Input placeholder="todo info" onChange={this.inputChange.bind(this)} style={{marginRight:'20px'}}/>
-          <Button type="primary" onClick={()=>addItemTodo(this.state.inputValue)}>Add</Button> 
-        </div> 
-        <div className="listBox">
-          <List
-          header={<div>Todo List</div>}
-          bordered
-          dataSource={this.props.data}
-          renderItem={item => (<List.Item><Typography.Text mark>[ITEM]</Typography.Text> {item}</List.Item>)}
-        />
-        </div>
-      </div>
+      <Fragment>
+        <Router> 
+          <GlobalStyle />
+          <Header/>
+          <Route exact path="/" component= { Home } />
+          <Route exact path="/detail" component= { Detail } />
+        </Router> 
+      </Fragment>
     );
   }
 }
@@ -43,6 +31,5 @@ const mapStateToProps = (state)=>{
   return{
     data: state.todos.list
   }
-
 }
-export default connect(mapStateToProps,{addItemTodo})(App);
+export default connect(mapStateToProps,null)(App);
